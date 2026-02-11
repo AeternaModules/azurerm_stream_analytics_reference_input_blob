@@ -28,7 +28,7 @@ EOT
     storage_container_name    = string
     stream_analytics_job_name = string
     time_format               = string
-    authentication_mode       = optional(string, "ConnectionString")
+    authentication_mode       = optional(string) # Default: "ConnectionString"
     storage_account_key       = optional(string)
     serialization = object({
       encoding        = optional(string)

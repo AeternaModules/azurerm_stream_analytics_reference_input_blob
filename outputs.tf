@@ -1,3 +1,7 @@
+output "stream_analytics_reference_input_blobs_id" {
+  description = "Map of id values across all stream_analytics_reference_input_blobs, keyed the same as var.stream_analytics_reference_input_blobs"
+  value       = { for k, v in azurerm_stream_analytics_reference_input_blob.stream_analytics_reference_input_blobs : k => v.id }
+}
 output "stream_analytics_reference_input_blobs_authentication_mode" {
   description = "Map of authentication_mode values across all stream_analytics_reference_input_blobs, keyed the same as var.stream_analytics_reference_input_blobs"
   value       = { for k, v in azurerm_stream_analytics_reference_input_blob.stream_analytics_reference_input_blobs : k => v.authentication_mode }

@@ -30,7 +30,7 @@ EOT
     storage_container_name                    = string
     stream_analytics_job_name                 = string
     time_format                               = string
-    authentication_mode                       = optional(string) # Default: "ConnectionString"
+    authentication_mode                       = optional(string)
     storage_account_key                       = optional(string)
     storage_account_key_key_vault_id          = optional(string)
     storage_account_key_key_vault_secret_name = optional(string)
@@ -40,74 +40,16 @@ EOT
       type            = string
     })
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.stream_analytics_job_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.date_format) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.path_pattern) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        v.storage_account_key == null || (length(v.storage_account_key) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.storage_account_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.storage_container_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.stream_analytics_reference_input_blobs : (
-        length(v.time_format) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_stream_analytics_reference_input_blob's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
   # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: stream_analytics_job_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: resource_group_name
   #   condition: length(value) <= 90
   #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
@@ -122,6 +64,31 @@ EOT
   #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
   # path: resource_group_name
   #   source:    [from resourcegroups.ValidateName] !matched
+  # path: date_format
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: path_pattern
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: storage_account_key
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: storage_account_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: storage_container_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: time_format
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: serialization.type
+  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
+  # path: serialization.field_delimiter
+  #   condition: contains([" ", ",", "\t", "|", ";"], value)
+  #   message:   must be one of:  , ,, 	, |, ;
+  # path: serialization.encoding
+  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
   # path: authentication_mode
   #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
 }
